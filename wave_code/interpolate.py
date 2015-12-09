@@ -14,6 +14,7 @@ def load_conv_matrix():
 
 def load_data(file):
 	data =  pd.read_csv(file, low_memory=False).iloc[1:,]
+	data = data.reset_index()
 	data['datetime'] =  pd.to_datetime(data['datetime'], format='%m/%d/%Y %H:%M')
 	for i in data.columns:
 		if type(data[i][1]) != pd.tslib.Timestamp:
@@ -50,9 +51,13 @@ def replace_nan(data, column, value_to_replace):
 
 
 def energy_output(x,y,output, data):
+	c = []
 	g = scs.interpolate.interp2d(x, y, output, kind='linear')
-	data['energy_output'] = g(data['WVHT'], data['DPD'])
-	return data 
+	for i in xrange(len(data['WVHT'])):
+		c.append(g(data['WVHT'][i], data['DPD'][i]))
+	fl_c = [float(i) for i in c]
+	data['energy_output'] = fl_c
+	return data
 
 if __name__ == '__main__':
 
