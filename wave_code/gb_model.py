@@ -12,11 +12,11 @@ def grid_search(X, y, split, max_features=[4,6,8,None], learning_rate=[.002,.005
 		for feat in max_features:
 			for learn in learning_rate:
 				model = GradientBoostingRegressor(n_estimators=2000,
-													learning_rate=learn,
-													max_features=feat,
-													subsample = .3,
-													min_samples_leaf=50,
-													random_state=3)
+								learning_rate=learn,
+								max_features=feat,
+								subsample = .3,
+								min_samples_leaf=50,
+								random_state=3)
 				model.fit(X[:split], y[:split])
 				in_samp_score = mean_squared_error(model.predict(X[:split]), y[:split])
 				out_samp_score = mean_squared_error(model.predict(X[split:]), y[split:])
@@ -46,25 +46,24 @@ def cross_val_ts(X,y, model,time):
 def grad_boost_model1(X,y, time, n_estimators=2000, learning_rate = .002, min_samples_leaf=50,
 					  subsample=.5, max_features=8):
 	model = GradientBoostingRegressor(n_estimators=n_estimators, 
-									  learning_rate = learning_rate,
-									  min_samples_leaf = min_samples_leaf,
-									  max_features=max_features,
-									  subsample = subsample,
-									  random_state = 1)
+					  learning_rate = learning_rate,
+					  min_samples_leaf = min_samples_leaf,
+					  max_features=max_features,
+					  subsample = subsample,
+					  random_state = 1)
 									  
 	return cross_val_ts(X,y,model, time)	
 	return model.fit(X,y)
 
 def future_predict(X1_wvht,y1,X1_dpd,y2, pred_wvht, pred_dpd):
 	model = GradientBoostingRegressor(n_estimators=2000, 
-									  learning_rate = .002,
-									  min_samples_leaf = 50,
-									  max_features=8,
-									  subsample = .5,
-									  random_state = 1)
+					  learning_rate = .002,
+					  min_samples_leaf = 50,
+					  max_features=8,
+					  subsample = .5,
+					  random_state = 1)
 
-	for i in range(1,5):
-		random_state=2
+	for i in range(1,6):
 		w = model.fit(X1_wvht[:-i],y1[:-i])
 		fore_wvht = w.predict(X1_wvht[-i:])
 		mae = mean_absolute_error(y1[-5:], fore_wvht)
@@ -72,7 +71,6 @@ def future_predict(X1_wvht,y1,X1_dpd,y2, pred_wvht, pred_dpd):
 		print mae, fore_wvht, y1[-i:]
 
 	for i in range(1,5):
-		random_state=2
 		w = model.fit(X1_dpd[:-i],y2[:-i])
 		fore_dpd = w.predict(X1_dpd[-i:])
 		mae = mean_absolute_error(y2[-5:], fore_dpd)
@@ -92,28 +90,28 @@ def prediction_plots(X1_wvht,y1,X1_dpd,y2, pred_wvht, pred_dpd):
 	ypred_wvht= list(w.predict(X1_wvht))
 	fore_wvht = w.predict(pred_wvht)
 	ypred_wvht.extend(list(fore_wvht))
+	mae_wvht = mean_absolute_error(y1,ypred_wvht[:-5])
 
 	d = model.fit(X1_dpd,y2)
 	ypred_dpd= list(d.predict(X1_dpd))
 	fore_dpd = d.predict(pred_dpd)
 	ypred_dpd.extend(list(fore_dpd))
+	mae_dpd = mean_absolute_error(y2,ypred_dpd[:-5])
 
 	fig, ax = plt.subplots(2,1)
 	ax[0].plot(y1.index[len(y1)-300:]+timedelta(hours=5),ypred_wvht[len(y1)-295:], color='r',label='Predicted Wave Height')
 	ax[0].plot(y1.index[len(y1)-295:],y1[len(y1)-295:],color='g', label = "Observed Values") #last 2 months
-	ax[0].set_title('300 hourly Waveheight observations: Cape Mendicino, CA : Gradient Boosted')
-	ax[0].set_xlabel('Date')
+	ax[0].set_title('300 hourly Wave Height observations: Bodega Bay, CA : Gradient Boosted \n \n Mean Absolute Error - {}'.format(mae_wvht),fontsize=18)
 	ax[0].set_ylabel('Meters')
 
 	ax[0].legend(loc='best')
 
 	ax[1].plot(y2.index[len(y2)-300:]+timedelta(hours=5),ypred_dpd[len(y2)-295:], color='r',label='Predicted Wave Period')
 	ax[1].plot(y2.index[len(y2)-287:],y2[len(y2)-287:],color='g', label = "Observed Values") #last 2 months
-	ax[1].set_title('300 hourly Wave Period observations: Cape Mendicino, CA : Gradient Boosted')
+	ax[1].set_title('300 hourly Wave Period observations: Bodega Bay, CA : Gradient Boosted \n \n Mean Absolute Error : {}'.format(mae_dpd), fontsize=18)
 	ax[1].set_xlabel('Date')
 	ax[1].set_ylabel('Seconds')
 
 	ax[1].legend(loc='best')
-	plt.savefig('cm_gb.png')
 	plt.tight_layout()
 	plt.show()
