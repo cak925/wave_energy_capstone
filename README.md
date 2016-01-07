@@ -11,7 +11,7 @@ The Pelamis converter utilizes the wave period and the wave height to produce en
 
 ## Dataset
 
-My data was transmitted from buoy sites managed by the National Oceanic and Atmospheric Association (NOAA). These buoys trasmitted wave height, wave period, time variables, and other wave properties, but only the height, period and time variables were ultimately utilized in the final analysis. I utilized 3 - 3.5 years of hourly data from three buoy locations along the California Coast. Here is a link to NOAA's website, where the buoy data was obtained. 
+My data was transmitted by buoy sites managed by the National Oceanic and Atmospheric Association (NOAA). These buoys produced wave height, wave period, time variables, and other wave properties, but only the height, period and time variables were ultimately utilized in the final analysis. I utilized 3 - 3.5 years of hourly data from three buoy locations along the California Coast. Here is a link to NOAA's website, where the buoy data was obtained. 
 [Buoy Data](http://www.ndbc.noaa.gov/)
 
 ## Models
