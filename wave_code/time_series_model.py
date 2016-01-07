@@ -90,22 +90,20 @@ def prediction_plots(X1,y1,y2,y_pred_wvht, y_pred_dpd, resid_wvht, predict_insam
 	#plt.subplot(2, 1, 1)
 	ax[0].plot(y1.index[len(y1)-305:]+timedelta(hours=5),predicted_values_wvht[len(y1)-304:], color='r',label='Predicted Wave height')
 	ax[0].plot(y1.index[len(y1)-300:],y1[len(y1)-300:],color='g', label = "Observed Values") #last 2 months
-	ax[0].set_title('300 hourly Waveheight observations: Crescent City, CA')
-	ax[0].set_xlabel('Date')
+	ax[0].set_title('300 hourly Waveheight observations: Seasonal ARIMA: Bodega Bay, CA \n \n Mean Absolute Error : .12146',fontsize=18)
 	ax[0].set_ylabel('Meters')
 
 	ax[0].legend(loc='best')
 
-	ax[1].plot(y2.index[len(y2)-304:]+timedelta(hours=5),predicted_values_dpd[len(y2)-304:],color='r',label='Predicted Dominant Wave Period')
+	ax[1].plot(y2.index[len(y2)-304:]+timedelta(hours=5),predicted_values_dpd[len(y2)-304:],color='r',label='Predicted Wave Period')
 	#plt.plot([1,2,3,4,5], forecast_dpd, color='b')
 	ax[1].plot(y2.index[len(y2)-300:],y2[len(y2)-300:],color='g', label = "Observed Values") #last 2 months
-	ax[1].set_title('300 hourly Dominant Wave Period observations: Crescent City, CA')
+	ax[1].set_title('300 hourly Dominant Wave Period observations: Seasonal ARIMA :  Bodega Bay, CA \n \n  Mean Absolute Error : 1.0553',fontsize=18)
 	ax[1].set_xlabel('Date')
 	ax[1].set_ylabel('Seconds')
 
 	ax[1].legend(loc='best')
 	plt.tight_layout()
-	plt.savefig('bb_ts.png')
 	plt.show()
 
 	return predicted_values_wvht[-5:], predicted_values_dpd[-5:]
