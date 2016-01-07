@@ -20,7 +20,7 @@ def groupby(data_new):
 
 
 def plot_energy(energy_data):
-	energy_data = pd.read_csv('energy_summary_all.csv')
+	energy_data = pd.read_csv(energy_data)
 	energy_data = energy_data.set_index('datetime')
 	energy_data.index = pd.to_datetime(energy_data.index)
 	
