@@ -20,20 +20,32 @@ def groupby(data_new):
 
 
 def plot_energy(energy_data):
-	energy_data =energy_data.set_index('datetime')
-	dates = [energy_data.index[i] for i in range(len(energy_data))]
+	energy_data = pd.read_csv('energy_summary_all.csv')
+	energy_data = energy_data.set_index('datetime')
+	energy_data.index = pd.to_datetime(energy_data.index)
+	
 	fig, ax = plt.subplots()
-
-	bar_width = 4
-	opacity = 0.6
-	error_config = {'ecolor': '0.3'}
-	plt.bar(pd.to_datetime(dates), energy_data['households_40'], bar_width,
-                 alpha=opacity,
-                 color='r',
-                 label='Average per month: 13,635 households')
+	
+	index = energy_data['Month']
+	bar_width = 0.2
+	opacity = 0.4
+	rects1 = plt.bar(index, energy_data['bb'], bar_width,
+	         alpha=opacity,
+	         color='b',
+	         label='Bodega Bay: Average Per Month 14,152 households\n')
+	rects2 = plt.bar(index+bar_width, energy_data['cc'], bar_width,
+	         alpha=opacity,
+	         color='r',
+	         label='Crescent City: Average Per Month 14,175 households\n')
+	rects3 = plt.bar(index+2*bar_width, energy_data['cm'], bar_width,
+	         alpha=opacity,
+	         color='g',
+	         label='Cape Mendicino: Average Per Month 20,842 households')
 	plt.legend(loc='best')
-	plt.xlabel('Date')
-	plt.ylabel('# of households')
-	plt.title('Total Households Powered Per Month : \n Crescent City, CA - Jan. 2012 : Dec. 2014 : 40 Converters')
-	plt.savefig('output_40_cc.png')
+	plt.xlabel('Month', fontsize=20)
+	plt.hlines(14152, linestyles='dashed', color='b',xmin=0,xmax=25)
+	plt.hlines(14175, linestyles='dashed', color='r',xmin=0,xmax=25)
+	plt.hlines(20842, linestyles='dashed', color='g',xmin=0,xmax=25)
+	plt.ylabel('# of households', fontsize = 20)
+	plt.title('Total Households Powered Per Month', fontsize = 24)
 	plt.show()
